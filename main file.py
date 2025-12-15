@@ -1,75 +1,98 @@
 # Imports
-import random
-import time, pygame, ttkbootstrap as ttk
+import ttkbootstrap as ttk
 from tkinter import *
-from tkinter import messagebox
 from ttkbootstrap import Style
 
-# screen
+# variables
+size = 75
 
+# screen
 root = Tk()
 root.title("Stream Deck - Python Edition")
-root.geometry("550x620")
+root.geometry("620x320")
 style = Style(theme="darkly")
 
+#definitions for top row
+def top(button):
+    print("hi")
+    if button == 1:
+        print("1")
 
-# buttons
-row_one = ttk.Frame(
-    root,
-    padding=10
+# frame for top buttons
+top_row = ttk.Frame(root)
+top_row.pack(pady=10)
+
+# Top button 1
+Btn_1_Top_F = ttk.Frame(top_row, width=size, height=size)
+Btn_1_Top_F.pack(side="left", padx=10)
+Btn_1_Top_F.pack_propagate(False)
+
+Btn_1_Top = ttk.Button(
+    Btn_1_Top_F,
+    text="Info",
+    bootstyle="info",
+    command=top(1)
 )
+Btn_1_Top.pack(fill="both", expand=True, side="left")
 
-row_two = ttk.Frame(
-    root,
-    padding=10
+# Top button 2
+Btn_2_Top_F = ttk.Frame(top_row, width=size, height=size)
+Btn_2_Top_F.pack(side="left", padx=10)
+Btn_2_Top_F.pack_propagate(False)
+
+Btn_2_Top = ttk.Button(
+    Btn_2_Top_F,
+    text="Info",
+    bootstyle="info"
 )
+Btn_2_Top.pack(fill="both", expand=True, side="left")
 
-row_three = ttk.Frame(
-    root,
-    padding=10
+# Top button = 3
+Btn_3_Top_F = ttk.Frame(top_row, width=size, height=size)
+Btn_3_Top_F.pack(side="left", padx=10)
+Btn_3_Top_F.pack_propagate(False)
+
+Btn_3_Top = ttk.Button(
+    Btn_3_Top_F,
+    text="Info",
+    bootstyle="info"
 )
+Btn_3_Top.pack(fill="both", expand=True, side="left")
 
-row_four = ttk.Frame(
-    root,
-    padding=10
+# Top button = 4
+Btn_4_Top_F = ttk.Frame(top_row, width=size, height=size)
+Btn_4_Top_F.pack(side="left", padx=10)
+Btn_4_Top_F.pack_propagate(False)
+
+Btn_4_Top = ttk.Button(
+    Btn_4_Top_F,
+    text="Info",
+    bootstyle="info"
 )
+Btn_4_Top.pack(fill="both", expand=True, side="left")
 
-row_one.pack(pady=1)
-row_two.pack(pady=1)
-row_three.pack(pady=1)
-row_four.pack(pady=1)
+# Top button = 5
+Btn_5_Top_F = ttk.Frame(top_row, width=size, height=size)
+Btn_5_Top_F.pack(side="left", padx=10)
+Btn_5_Top_F.pack_propagate(False)
 
-button = ttk.Button(
-    row_one,
-    text="idk",
-    padding="20",
-    width="5"
+Btn_5_Top = ttk.Button(
+    Btn_5_Top_F,
+    text="Info",
+    bootstyle="info"
 )
+Btn_5_Top.pack(fill="both", expand=True, side="left")
 
-button1 = ttk.Button(
-    row_two,
-    text="idk",
-    padding="20",
-    width="5"
-)
-
-button2 = ttk.Button(
-    row_three,
-    text="idk",
-    padding="20",
-    width="5"
-)
-
-button3 = ttk.Button(
-    row_four,
-    text="idk",
-    padding="20",
-    width="5"
-)
-
-button.pack(side="left")
-button1.pack(side="left")
-button2.pack(side="left")
-button3.pack(side="left")
 
 root.mainloop()
+
+
+# m = ttk.Meter(
+#     master=root,
+#     metersize=150,
+#     amountused=45,
+#     subtext="meter widget",
+#     bootstyle="info",
+#     interactive=False,
+# )
+# m.pack(pady=10)
