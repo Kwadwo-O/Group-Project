@@ -1,6 +1,5 @@
 # Imports
 import psutil
-import pynvml
 import ttkbootstrap as ttk
 from tkinter import *
 from ttkbootstrap import Style
@@ -243,15 +242,11 @@ Btn_5_Bot.pack(fill="both", expand=True, side="left")
 setting = Frame(root)
 
 CPU_load = 0
-GPU_load = 0
 
 def cpu():
     global CPU_load,GPU_load
     CPU_load = psutil.cpu_percent(interval=None)  # non-blocking
     CPU_load_wheel.configure(amountused=CPU_load)
-    # util = pynvml.nvmlDeviceGetUtilizationRates(handle)
-    # GPU_load = util.gpu
-    GPU_load_wheel.configure(amountused=GPU_load)
     root.after(1000, cpu)  # update every second
 
 CPU_load_wheel = ttk.Meter(
@@ -264,15 +259,7 @@ CPU_load_wheel = ttk.Meter(
 )
 CPU_load_wheel.pack(pady=10,side="left")
 
-GPU_load_wheel = ttk.Meter(
-    master=setting,
-    metersize=150,
-    amountused=GPU_load,
-    subtext="GPU usage",
-    bootstyle="info",
-    interactive=False,
-)
-GPU_load_wheel.pack(pady=10,side="left")
+
 
 cpu()
 
