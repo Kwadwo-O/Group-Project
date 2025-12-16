@@ -1,24 +1,96 @@
 # Imports
 from tkinter import messagebox
-import psutil
-import ttkbootstrap as ttk
 from tkinter import *
-import pyvolume
 from ttkbootstrap import Style
-import webbrowser
-import os
-
+import webbrowser, os, time, pyvolume, psutil, ttkbootstrap as ttk
+from tooltip import Tooltip
+from pynput.keyboard import Key, Controller
 
 # screen
 root = Tk()
 root.title("Stream Deck - Python Edition")
-root.geometry("500x475")
+root.geometry("500x500")
 style = Style(theme="darkly")
 # variables
 size = 75
+theme_number = 1
+
+# definitions for the Meters
+
+def cpu():
+    CPU_load_wheel.configure(amountused=psutil.cpu_percent())
+    RAM_Usage_wheel.configure(amountused=psutil.virtual_memory().percent)
+    root.after(1000, cpu)  # update every second
+
+
+def volume():
+    pos = volume_meter['amountused']  # using dictionary-style access
+    pyvolume.custom(percent=pos)
+    root.after(1000, volume)
+
+# Definition For the settings page
+
+def settings():
+    settingsdisp = Toplevel()
+    settingsdisp.iconbitmap("cog.ico")
+    settingsdisp.title("Settings")
+    settingsdisp.geometry("425x220")
+    # frame for side-by-side buttons
+    top_row = ttk.Frame(settingsdisp)
+    top_row.pack(pady=10)
+    # frame for side-by-side buttons
+    mid_row = ttk.Frame(settingsdisp)
+    mid_row.pack(pady=10)
+    # frame for side-by-side buttons
+    bottom_row = ttk.Frame(settingsdisp)
+    bottom_row.pack(pady=10)
+    def change_theme():
+        global theme_number
+        themes = ["cyborg", "journal", "minty", "darkly"]
+        Style(theme=themes[theme_number])
+        change.config(text=themes[theme_number] if theme_number != 3 else "darkly - default")
+        theme_number += 1
+        if theme_number == 4:
+            theme_number = 0
+    # -------- theme change menu button ---------
+    change = ttk.Button(
+        top_row,
+        text="change theme",
+        bootstyle="dark",
+        command=change_theme,
+        width=15
+    )
+    change.pack(side="left", padx=5)
+
+    # -------- info button ---------
+    Info_button = ttk.Button(
+        top_row,
+        text="Info",
+        bootstyle="info",
+        # command=info,
+        width=15
+    )
+    Info_button.pack(side="left", padx=5)
+    # -------- exit button at bottom ---------
+    def exit_page():
+        settingsdisp.destroy()
+    exit_button = ttk.Button(
+        settingsdisp,
+        text="Exit",
+        bootstyle="danger",
+        command=exit_page,
+        width=20
+    )
+    exit_button.pack(side="bottom", pady=10)
+    Tooltip(change, "Click to change theme")
+    Tooltip(Info_button, "If you dont know how to use the stream deck")
+    Tooltip(exit_button, "Click to exit this menu")
+
 
 #definitions for top row
 def button_def(button,row):
+    keyboard = Controller()
+
     if button == 1 and row == 1:
         os.startfile('chrome')
     if button == 2 and row == 1:
@@ -32,7 +104,6 @@ def button_def(button,row):
             title="warning",
             message="Do you want to logoff?",
             icon="warning")
-
         if result:
             messagebox.showinfo("Success", "Logging off")
             os.startfile("logoff")  # Run your command
@@ -46,6 +117,37 @@ def button_def(button,row):
         webbrowser.open('https://outlook.office365.com/mail/?realm=ndonline.ac.uk')
     if button == 5 and row == 2:
         webbrowser.open('https://www.google.com/webhp?hl=en&ictx=2&sa=X&ved=0ahUKEwi42I74zb-RAxWvU6QEHbIAJbwQPQgJ')
+
+    if button == 1 and row == 3:
+        time.sleep(1)
+        keyboard.press(Key.ctrl)
+        keyboard.press('c')
+        keyboard.release('c')
+        keyboard.release(Key.ctrl)
+
+    if button == 2 and row == 3:
+        time.sleep(1)
+        keyboard.press(Key.ctrl)
+        keyboard.press('v')
+        keyboard.release('v')
+        keyboard.release(Key.ctrl)
+
+    if button == 3 and row == 3:
+        time.sleep(1)
+        keyboard.press(Key.ctrl)
+        keyboard.press('z')
+        keyboard.release('z')
+        keyboard.release(Key.ctrl)
+
+    if button ==3 and row == 3:
+        time.sleep(1)
+        keyboard.press(Key.ctrl)
+        keyboard.press('y')
+        keyboard.release('y')
+        keyboard.release(Key.ctrl)
+
+    if button == 5 and row == 3:
+        settings()
 
 # frame for top row
 top_row = ttk.Frame(root)
@@ -74,8 +176,8 @@ Btn_5_Top_F.pack_propagate(False)
 # Top button 1
 Btn_1_Top = ttk.Button(
     Btn_1_Top_F,
-    text=" Open\nChrome",
-    bootstyle="info",
+    text="Chrome",
+    bootstyle="success",
     command=lambda: button_def(1,1)
 )
 
@@ -83,31 +185,31 @@ Btn_1_Top = ttk.Button(
 # Top button 2
 Btn_2_Top = ttk.Button(
     Btn_2_Top_F,
-    text="  Open\nTeams",
-    bootstyle="info",
+    text="Teams",
+    bootstyle="success",
     command=lambda: button_def(2,1)
 )
 
 # Top button = 3
 Btn_3_Top = ttk.Button(
     Btn_3_Top_F,
-    text="   Open\nPyCharm",
-    bootstyle="info",
+    text="PyCharm",
+    bootstyle="success",
     command=lambda: button_def(3,1)
 )
 
 # Top button = 4
 Btn_4_Top = ttk.Button(
     Btn_4_Top_F,
-    text="Open\n Word",
-    bootstyle="info",
+    text="Word",
+    bootstyle="success",
     command=lambda: button_def(4,1)
 )
 
 # Top button = 5
 Btn_5_Top = ttk.Button(
     Btn_5_Top_F,
-    text=" Logoff\n    PC",
+    text="Logoff",
     bootstyle="danger",
     command=lambda: button_def(5,1)
 )
@@ -147,40 +249,40 @@ Btn_5_Mid_F.pack_propagate(False)
 # Top button 1
 Btn_1_Mid = ttk.Button(
     Btn_1_Mid_F,
-    text=" Open\nGithub",
-    bootstyle="info",
+    text="Github",
+    bootstyle="dark",
     command=lambda: button_def(1,2)
 )
 
 # Top button 2
 Btn_2_Mid = ttk.Button(
     Btn_2_Mid_F,
-    text="Open\nCedar",
-    bootstyle="info",
+    text="Cedar",
+    bootstyle="dark",
     command=lambda: button_def(2,2)
 )
 
 # Top button = 3
 Btn_3_Mid = ttk.Button(
     Btn_3_Mid_F,
-    text="   Open\nChatGPT",
-    bootstyle="info",
+    text="ChatGPT",
+    bootstyle="dark",
     command=lambda: button_def(3,2)
 )
 
 # Top button = 4
 Btn_4_Mid = ttk.Button(
     Btn_4_Mid_F,
-    text="  Open\nOutlook",
-    bootstyle="info",
+    text="Outlook",
+    bootstyle="dark",
     command=lambda: button_def(4,2)
 )
 
 # Top button = 5
 Btn_5_Mid = ttk.Button(
     Btn_5_Mid_F,
-    text="  Open\nGoogle",
-    bootstyle="info",
+    text="Google",
+    bootstyle="dark",
     command=lambda: button_def(5,2)
 )
 
@@ -218,7 +320,7 @@ Btn_5_Bot_F.pack_propagate(False)
 # Top button 1
 Btn_1_Bot = ttk.Button(
     Btn_1_Bot_F,
-    text="N/A",
+    text="Copy",
     bootstyle="info",
     command=lambda: button_def(1,3)
 )
@@ -226,7 +328,7 @@ Btn_1_Bot = ttk.Button(
 # Top button 2
 Btn_2_Bot = ttk.Button(
     Btn_2_Bot_F,
-    text="N/A",
+    text="Paste",
     bootstyle="info",
     command=lambda: button_def(2,3)
 )
@@ -234,7 +336,7 @@ Btn_2_Bot = ttk.Button(
 # Top button = 3
 Btn_3_Bot = ttk.Button(
     Btn_3_Bot_F,
-    text="N/A",
+    text="Undo",
     bootstyle="info",
     command=lambda: button_def(3,3)
 )
@@ -242,7 +344,7 @@ Btn_3_Bot = ttk.Button(
 # Top button = 4
 Btn_4_Bot = ttk.Button(
     Btn_4_Bot_F,
-    text="N/A",
+    text="Redo",
     bootstyle="info",
     command=lambda: button_def(4,3)
 )
@@ -250,8 +352,8 @@ Btn_4_Bot = ttk.Button(
 # Top button = 5
 Btn_5_Bot = ttk.Button(
     Btn_5_Bot_F,
-    text="N/A",
-    bootstyle="info",
+    text="Settings",
+    bootstyle="warning",
     command=lambda: button_def(5,3)
 )
 
@@ -262,28 +364,36 @@ Btn_3_Bot.pack(fill="both", expand=True, side="left")
 Btn_4_Bot.pack(fill="both", expand=True, side="left")
 Btn_5_Bot.pack(fill="both", expand=True, side="left")
 
+# pages_F = ttk.Frame()
+# pages_T = ttk.Checkbutton(pages_F, bootstyle="round-toggle")
+# Pages_Text = ttk.Label(pages_F,text="1/2")
+#
+# pages_T.pack()
+# pages_F.pack()
+# Pages_Text.pack(side="left")
+
 setting = Frame(root)
-
-CPU_load = 0
-GPU_load = 0
-
-def cpu():
-    global CPU_load,GPU_load
-    CPU_load = psutil.cpu_percent(interval=None)  # non-blocking
-    CPU_load_wheel.configure(amountused=CPU_load)
-    # util = pynvml.nvmlDeviceGetUtilizationRates(handle)
-    # GPU_load = util.gpu
-    root.after(1000, cpu)  # update every second
 
 CPU_load_wheel = ttk.Meter(
     master=setting,
     metersize=150,
-    amountused=CPU_load,
+    amountused=0,
     subtext="CPU usage",
     bootstyle="info",
     interactive=False,
+    textright="% / 100",
+
 )
-CPU_load_wheel.pack(pady=10,side="left")
+
+RAM_Usage_wheel = ttk.Meter(
+    master=setting,
+    metersize=150,
+    amountused=0,
+    subtext="CPU usage",
+    bootstyle="info",
+    interactive=False,
+    textright="% / 100",
+)
 
 volume_meter = ttk.Meter(
     master=setting,
@@ -294,14 +404,36 @@ volume_meter = ttk.Meter(
     interactive=True,
     textright="%",
 )
-volume_meter.pack(pady=20)
-
-def volume():
-    pos = volume_meter['amountused']  # using dictionary-style access
-    pyvolume.custom(percent=pos)
-    root.after(1000,volume)
-
-volume()
 
 setting.pack()
+CPU_load_wheel.pack(pady=10,side="left",padx=10)
+RAM_Usage_wheel.pack(pady=10,side="left")
+volume_meter.pack(padx=10)
+
+Tooltip(volume_meter,"change the volume")
+Tooltip(CPU_load_wheel,"Display CPU Load")
+Tooltip(RAM_Usage_wheel,"Display RAM load")
+
+Tooltip(Btn_1_Top,"click to open Chrome")
+Tooltip(Btn_2_Top,"click to open Teams")
+Tooltip(Btn_3_Top,"click to open Pycharm")
+Tooltip(Btn_4_Top,"click to open Word")
+Tooltip(Btn_5_Top,"click to Logoff")
+
+Tooltip(Btn_1_Mid,"click to open Github")
+Tooltip(Btn_2_Mid,"click to open Cedar")
+Tooltip(Btn_3_Mid,"click to open Chatgpt")
+Tooltip(Btn_4_Mid,"click to open Outlook")
+Tooltip(Btn_5_Mid,"click to open Google")
+
+Tooltip(Btn_1_Bot,"Copy Text - click this and select text")
+Tooltip(Btn_2_Bot,"Paste Text - click this and select text")
+Tooltip(Btn_3_Bot,"Undo - click this and go back to the software")
+Tooltip(Btn_4_Bot,"Redo - click this and go back to the software")
+Tooltip(Btn_5_Bot,"Settings")
+
+
+cpu()
+volume()
+
 root.mainloop()
