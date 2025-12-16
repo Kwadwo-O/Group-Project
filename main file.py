@@ -11,6 +11,7 @@ root = Tk()
 root.title("Stream Deck - Python Edition")
 root.geometry("500x500")
 style = Style(theme="darkly")
+root.iconbitmap("icon.ico")
 # variables
 size = 75
 theme_number = 1
