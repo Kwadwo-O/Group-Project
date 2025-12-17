@@ -11,10 +11,11 @@ root = Tk()
 root.title("Stream Deck - Python Edition")
 root.geometry("500x500")
 style = Style(theme="darkly")
+root.resizable(0, 0)
 # variables
 size = 75
 theme_number = 1
-
+buttonpress = False
 # definitions for the Meters
 
 def cpu():
@@ -22,15 +23,29 @@ def cpu():
     RAM_Usage_wheel.configure(amountused=psutil.virtual_memory().percent)
     root.after(1000, cpu)  # update every second
 
-
+check = 0
 def volume():
+    global check
     pos = volume_meter['amountused']  # using dictionary-style access
-    pyvolume.custom(percent=pos)
+    if check != pos:
+        pyvolume.custom(percent=pos)
+        check = volume_meter['amountused']
     root.after(1000, volume)
 
 # Definition For the settings page
 
+def info():
+    infopage = Toplevel()
+    infopage.iconbitmap("cog.ico")
+    infopage.title("Settings")
+    infopage.geometry("425x220")
+    text = ttk.Label(
+        infopage,
+        text="All you do is click a button and it runs a command"
+    )
+    text.pack(pady=10)
 def settings():
+    global buttonpress
     settingsdisp = Toplevel()
     settingsdisp.iconbitmap("cog.ico")
     settingsdisp.title("Settings")
@@ -55,22 +70,42 @@ def settings():
     # -------- theme change menu button ---------
     change = ttk.Button(
         top_row,
-        text="change theme",
+        text="unlocked",
         bootstyle="dark",
         command=change_theme,
         width=15
     )
     change.pack(side="left", padx=5)
-
     # -------- info button ---------
     Info_button = ttk.Button(
         top_row,
         text="Info",
         bootstyle="info",
-        # command=info,
+        command=info,
         width=15
     )
     Info_button.pack(side="left", padx=5)
+    # -------- change lock button ---------
+    def lock_screen():
+        global buttonpress
+        buttonpress = not buttonpress
+        if buttonpress:
+            root.attributes('-topmost', True)
+            lock.config(text="unlocked")
+            Tooltip(lock,"lock on top of screen")
+        else:
+            root.attributes('-topmost', False)
+            lock.config(text="locked")
+            Tooltip(lock,"Unlock on top of screen")
+    lock = ttk.Button(
+        top_row,
+        text="change theme",
+        bootstyle="dark",
+        command=lock_screen(),
+        width=15
+    )
+    lock.pack(side="left", padx=5)
+
     # -------- exit button at bottom ---------
     def exit_page():
         settingsdisp.destroy()
@@ -435,5 +470,4 @@ Tooltip(Btn_5_Bot,"Settings")
 
 cpu()
 volume()
-
 root.mainloop()
