@@ -70,7 +70,7 @@ def settings():
     # -------- theme change menu button ---------
     change = ttk.Button(
         top_row,
-        text="unlocked",
+        text="Change Theme",
         bootstyle="dark",
         command=change_theme,
         width=15
@@ -89,21 +89,21 @@ def settings():
     def lock_screen():
         global buttonpress
         buttonpress = not buttonpress
+        Tooltip(lock, "lock on top of screen - does break this tooltip" if not buttonpress else "Unlock on top of screen")
         if buttonpress:
             root.attributes('-topmost', True)
             lock.config(text="unlocked")
-            Tooltip(lock,"lock on top of screen")
         else:
             root.attributes('-topmost', False)
             lock.config(text="locked")
-            Tooltip(lock,"Unlock on top of screen")
     lock = ttk.Button(
         top_row,
-        text="change theme",
-        bootstyle="dark",
-        command=lock_screen(),
+        text="change Lock",
+        bootstyle="warning",
+        command=lock_screen,
         width=15
     )
+    Tooltip(lock, "lock on top of screen - does break this tooltip" if not buttonpress else "Unlock on top of screen")
     lock.pack(side="left", padx=5)
 
     # -------- exit button at bottom ---------
