@@ -1,4 +1,4 @@
-ttkbootstrap~=1.19.1
+ttkbootstrap
 psutil
 pynput
 volume-control
