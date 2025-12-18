@@ -10,10 +10,9 @@ from pynput.keyboard import Key, Controller
 root = Tk()
 root.title("Python Tech Stream Deck")
 root.iconbitmap("main.ico")
-root.iconbitmap("main.ico")
-root.geometry("500x500")
+root.geometry("555x500")
 style = Style(theme="darkly")
-root.resizable(0, 0)
+# root.resizable(0, 0)
 # variables
 size = 75
 theme_number = 1
@@ -44,8 +43,8 @@ def info():
     text = ttk.Label(
         infopage,
         text="""
-                                    ROW 1
-                                    
+        ROW 1
+
 the chrome button it runs a command that opens chrome directly
 same runs for above for pycharm and word
 teams it opens edge web-browser and opens teams form there
@@ -53,17 +52,21 @@ teams it opens edge web-browser and opens teams form there
 opening log-off opens a confirmation window to prevent accidental clicking
 clicking yes will sign user out of PC
 clicking no will rid of the window and return
-        
-                                    ROW 2
-                                    
+
+        ROW 2
+
 if you open any of the buttons it opens the link of said website on the web-browser
 it does not account for any history within the website just opens the link directly
-        
-                                    ROW 3
 
-        
-  
-        """
+        ROW 3
+
+this runs key combinations as a button
+
+        ROW 4
+
+shows live CPU and RAM usage 
+also allows for live changes to volume
+"""
     )
     text.pack()
     def exit_page():
@@ -124,10 +127,10 @@ def settings():
         Tooltip(lock, "lock on top of screen - does break this tooltip" if not buttonpress else "Unlock on top of screen")
         if buttonpress:
             root.attributes('-topmost', True)
-            lock.config(text="unlocked")
+            lock.config(text="Locked")
         else:
             root.attributes('-topmost', False)
-            lock.config(text="locked")
+            lock.config(text="Unlocked")
     lock = ttk.Button(
         top_row,
         text="change Lock",
@@ -439,10 +442,17 @@ Btn_5_Bot.pack(fill="both", expand=True, side="left")
 # pages_F.pack()
 # Pages_Text.pack(side="left")
 
+
 setting = Frame(root)
 
+data = ttk.Labelframe(master=setting, text="Performance Meter", padding=(10, 5))
+data.pack(side="left",padx=10)
+
+volume_F = ttk.Labelframe(master=setting, text="Volume", padding=(10, 5))
+volume_F.pack(side="left")
+
 CPU_load_wheel = ttk.Meter(
-    master=setting,
+    master=data,
     metersize=150,
     amountused=0,
     subtext="CPU usage",
@@ -453,7 +463,7 @@ CPU_load_wheel = ttk.Meter(
 )
 
 RAM_Usage_wheel = ttk.Meter(
-    master=setting,
+    master=data,
     metersize=150,
     amountused=0,
     subtext="RAM usage",
@@ -463,7 +473,7 @@ RAM_Usage_wheel = ttk.Meter(
 )
 
 volume_meter = ttk.Meter(
-    master=setting,
+    master=volume_F,
     metersize=150,
     amountused=50,        # initial value
     subtext="Volume",
@@ -475,7 +485,7 @@ volume_meter = ttk.Meter(
 setting.pack()
 CPU_load_wheel.pack(pady=10,side="left")
 RAM_Usage_wheel.pack(pady=10,side="left")
-volume_meter.pack(pady=10, side="left")
+volume_meter.pack(pady=10, side="left",padx=10)
 
 Tooltip(volume_meter,"change the volume")
 Tooltip(CPU_load_wheel,"Display CPU Load")
