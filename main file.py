@@ -38,12 +38,42 @@ def info():
     infopage = Toplevel()
     infopage.iconbitmap("cog.ico")
     infopage.title("Settings")
-    infopage.geometry("425x220")
+    infopage.geometry("600x450")
     text = ttk.Label(
         infopage,
-        text="All you do is click a button and it runs a command"
+        text="""
+                                    ROW 1
+                                    
+the chrome button it runs a command that opens chrome directly
+same runs for above for pycharm and word
+teams it opens edge web-browser and opens teams form there
+(can either open in-app or in web-browser)
+opening log-off opens a confirmation window to prevent accidental clicking
+clicking yes will sign user out of PC
+clicking no will rid of the window and return
+        
+                                    ROW 2
+                                    
+if you open any of the buttons it opens the link of said website on the web-browser
+it does not account for any history within the website just opens the link directly
+        
+                                    ROW 3
+
+        
+  
+        """
     )
-    text.pack(pady=10)
+    text.pack()
+    def exit_page():
+        infopage.destroy()
+    exit_button = ttk.Button(
+        infopage,
+        text="Exit",
+        bootstyle="danger",
+        command=exit_page,
+        width=20
+    )
+    exit_button.pack(side="bottom", pady=10)
 def settings():
     global buttonpress
     settingsdisp = Toplevel()
