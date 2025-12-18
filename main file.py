@@ -8,7 +8,9 @@ from pynput.keyboard import Key, Controller
 
 # screen
 root = Tk()
-root.title("Stream Deck - Python Edition")
+root.title("Python Tech Stream Deck")
+root.iconbitmap("main.ico")
+root.iconbitmap("main.ico")
 root.geometry("500x500")
 style = Style(theme="darkly")
 root.resizable(0, 0)
@@ -454,7 +456,7 @@ RAM_Usage_wheel = ttk.Meter(
     master=setting,
     metersize=150,
     amountused=0,
-    subtext="CPU usage",
+    subtext="RAM usage",
     bootstyle="info",
     interactive=False,
     textright="% / 100",
@@ -471,9 +473,9 @@ volume_meter = ttk.Meter(
 )
 
 setting.pack()
-CPU_load_wheel.pack(pady=10,side="left",padx=10)
+CPU_load_wheel.pack(pady=10,side="left")
 RAM_Usage_wheel.pack(pady=10,side="left")
-volume_meter.pack(padx=10)
+volume_meter.pack(pady=10, side="left")
 
 Tooltip(volume_meter,"change the volume")
 Tooltip(CPU_load_wheel,"Display CPU Load")
